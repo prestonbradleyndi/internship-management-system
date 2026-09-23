@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================= -->
+    <!-- DIRECT INTERNSHIP SUPERVISOR GROUP -->
+    <!-- ========================================================= -->
+
+    <!--
+        This group is assigned ONLY to actual Internship Supervisors.
+
+        It inherits the normal Supervisor group so that existing
+        menus and permissions continue to work.
+
+        Coordinators and Senior Supervisors do NOT receive this group.
+    -->
+
+    <record id="group_ims_assigned_supervisor" model="res.groups">
+        <field name="name">Assigned Internship Supervisor</field>
+        <field name="implied_ids"
+               eval="[(4, ref('internship_management.group_ims_supervisor'))]"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISOR RECORD RULE - INTERNS                         -->
+    <!-- ========================================================= -->
+
+    <record id="rule_ims_assigned_supervisor_intern" model="ir.rule">
+        <field name="name">Supervisor: Assigned Interns Only</field>
+        <field name="model_id"
+               ref="internship_management.model_ims_intern"/>
+        <field name="groups"
+               eval="[(4, ref('internship_management.group_ims_assigned_supervisor'))]"/>
+        <field name="domain_force">[('supervisor_id', '=', user.id)]</field>
+
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISOR RECORD RULE - TASKS                           -->
+    <!-- ========================================================= -->
+
+    <record id="rule_ims_assigned_supervisor_task" model="ir.rule">
+        <field name="name">Supervisor: Assigned Tasks Only</field>
+        <field name="model_id"
+               ref="internship_management.model_ims_task"/>
+        <field name="groups"
+               eval="[(4, ref('internship_management.group_ims_assigned_supervisor'))]"/>
+        <field name="domain_force">[('intern_id.supervisor_id', '=', user.id)]</field>
+
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISOR RECORD RULE - ATTENDANCE                      -->
+    <!-- ========================================================= -->
+
+    <record id="rule_ims_assigned_supervisor_attendance" model="ir.rule">
+        <field name="name">Supervisor: Assigned Attendance Only</field>
+        <field name="model_id"
+               ref="internship_management.model_ims_attendance"/>
+        <field name="groups"
+               eval="[(4, ref('internship_management.group_ims_assigned_supervisor'))]"/>
+        <field name="domain_force">[('intern_id.supervisor_id', '=', user.id)]</field>
+
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISOR RECORD RULE - INTERNSHIP REPORTS              -->
+    <!-- ========================================================= -->
+
+    <record id="rule_ims_assigned_supervisor_report" model="ir.rule">
+        <field name="name">Supervisor: Assigned Reports Only</field>
+        <field name="model_id"
+               ref="internship_management.model_ims_internship_report"/>
+        <field name="groups"
+               eval="[(4, ref('internship_management.group_ims_assigned_supervisor'))]"/>
+        <field name="domain_force">[('intern_id.supervisor_id', '=', user.id)]</field>
+
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISOR RECORD RULE - EVALUATIONS                     -->
+    <!-- ========================================================= -->
+
+    <record id="rule_ims_assigned_supervisor_evaluation" model="ir.rule">
+        <field name="name">Supervisor: Assigned Evaluations Only</field>
+        <field name="model_id"
+               ref="internship_management.model_ims_evaluation"/>
+        <field name="groups"
+               eval="[(4, ref('internship_management.group_ims_assigned_supervisor'))]"/>
+        <field name="domain_force">[('intern_id.supervisor_id', '=', user.id)]</field>
+
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISOR RECORD RULE - FEEDBACK                        -->
+    <!-- ========================================================= -->
+
+    <record id="rule_ims_assigned_supervisor_feedback" model="ir.rule">
+        <field name="name">Supervisor: Assigned Feedback Only</field>
+        <field name="model_id"
+               ref="internship_management.model_ims_feedback"/>
+        <field name="groups"
+               eval="[(4, ref('internship_management.group_ims_assigned_supervisor'))]"/>
+        <field name="domain_force">[('intern_id.supervisor_id', '=', user.id)]</field>
+
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- HR ACCESS - INTERNSHIPS                                  -->
+    <!-- ========================================================= -->
+
+    <record id="access_ims_internship_hr_read" model="ir.model.access">
+        <field name="name">ims.internship.hr.read</field>
+        <field name="model_id"
+               ref="internship_management.model_ims_internship"/>
+        <field name="group_id"
+               ref="internship_management.group_ims_hr"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- HR ACCESS - TASKS                                        -->
+    <!-- ========================================================= -->
+
+    <record id="access_ims_task_hr_read" model="ir.model.access">
+        <field name="name">ims.task.hr.read</field>
+        <field name="model_id"
+               ref="internship_management.model_ims_task"/>
+        <field name="group_id"
+               ref="internship_management.group_ims_hr"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- HR ACCESS - ATTENDANCE                                   -->
+    <!-- ========================================================= -->
+
+    <record id="access_ims_attendance_hr_read" model="ir.model.access">
+        <field name="name">ims.attendance.hr.read</field>
+        <field name="model_id"
+               ref="internship_management.model_ims_attendance"/>
+        <field name="group_id"
+               ref="internship_management.group_ims_hr"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- PORTAL RECORD RULES                                      -->
+    <!-- ========================================================= -->
+
+    <!-- Intern can only see their own intern record -->
+
+    <record id="rule_ims_portal_own_intern" model="ir.rule">
+        <field name="name">IMS Portal - Own Intern Record</field>
+        <field name="model_id" ref="model_ims_intern"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('email', '=', user.email)]</field>
+    </record>
+
+
+    <!-- Intern can only see their own internship -->
+
+    <record id="rule_ims_portal_own_internship" model="ir.rule">
+        <field name="name">IMS Portal - Own Internship</field>
+        <field name="model_id" ref="model_ims_internship"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">
+            [('id', 'in', user.env['ims.task'].search([('intern_id.email', '=', user.email)]).mapped('internship_id').ids)]
+        </field>
+    </record>
+
+
+    <!-- Intern can only see their own tasks -->
+
+    <record id="rule_ims_portal_own_task" model="ir.rule">
+        <field name="name">IMS Portal - Own Tasks</field>
+        <field name="model_id" ref="model_ims_task"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('intern_id.email', '=', user.email)]</field>
+    </record>
+
+
+    <!-- Intern can only see their own internship reports -->
+
+    <record id="rule_ims_portal_own_report" model="ir.rule">
+        <field name="name">IMS Portal - Own Reports</field>
+        <field name="model_id" ref="model_ims_internship_report"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('intern_id.email', '=', user.email)]</field>
+    </record>
+
+
+    <!-- Intern can only see their own feedback -->
+
+    <record id="rule_ims_portal_own_feedback" model="ir.rule">
+        <field name="name">IMS Portal - Own Feedback</field>
+        <field name="model_id" ref="model_ims_feedback"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('intern_id.email', '=', user.email)]</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================= -->
+    <!-- INTERN ACTION                                             -->
+    <!-- ========================================================= -->
+
+    <record id="action_ims_intern" model="ir.actions.act_window">
+        <field name="name">Interns</field>
+        <field name="res_model">ims.intern</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- INTERN LIST VIEW                                          -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_intern_list" model="ir.ui.view">
+        <field name="name">ims.intern.list</field>
+        <field name="model">ims.intern</field>
+        <field name="arch" type="xml">
+            <list string="Interns">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="school"/>
+                <field name="program"/>
+                <field name="supervisor_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- INTERN FORM VIEW                                          -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_intern_form" model="ir.ui.view">
+        <field name="name">ims.intern.form</field>
+        <field name="model">ims.intern</field>
+        <field name="arch" type="xml">
+            <form string="Intern">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="email"/>
+                            <field name="phone"/>
+                        </group>
+
+                        <group>
+                            <field name="school"/>
+                            <field name="program"/>
+
+                            <!--
+                                Only users belonging to the
+                                Assigned Internship Supervisor group
+                                can be selected.
+                            -->
+                            <field
+                                name="supervisor_id"
+                                domain="[('groups_id', 'in', [%(internship_management.group_ims_assigned_supervisor)d])]"
+                            />
+                        </group>
+                    </group>
+
+                    <group string="Internship Period">
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+
+                        <group>
+                            <field name="status"/>
+                        </group>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- INTERNSHIP ACTION                                        -->
+    <!-- ========================================================= -->
+
+    <record id="action_ims_internship" model="ir.actions.act_window">
+        <field name="name">Internships</field>
+        <field name="res_model">ims.internship</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- INTERNSHIP LIST VIEW                                      -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_internship_list" model="ir.ui.view">
+        <field name="name">ims.internship.list</field>
+        <field name="model">ims.internship</field>
+        <field name="arch" type="xml">
+            <list string="Internships">
+                <field name="name"/>
+                <field name="department"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- INTERNSHIP FORM VIEW                                      -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_internship_form" model="ir.ui.view">
+        <field name="name">ims.internship.form</field>
+        <field name="model">ims.internship</field>
+        <field name="arch" type="xml">
+            <form string="Internship">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="department"/>
+                        </group>
+
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="status"/>
+                        </group>
+                    </group>
+
+                    <group string="Description">
+                        <field name="description"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- TASK ACTION                                               -->
+    <!-- ========================================================= -->
+
+    <record id="action_ims_task" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">ims.task</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- TASK LIST VIEW                                            -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_task_list" model="ir.ui.view">
+        <field name="name">ims.task.list</field>
+        <field name="model">ims.task</field>
+        <field name="arch" type="xml">
+            <list string="Tasks">
+                <field name="name"/>
+                <field name="intern_id"/>
+                <field name="internship_id"/>
+                <field name="supervisor_id"/>
+                <field name="due_date"/>
+                <field name="progress"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- TASK FORM VIEW                                            -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_task_form" model="ir.ui.view">
+        <field name="name">ims.task.form</field>
+        <field name="model">ims.task</field>
+        <field name="arch" type="xml">
+            <form string="Task">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="intern_id"/>
+                            <field name="internship_id"/>
+                        </group>
+
+                        <group>
+                            <field name="supervisor_id"/>
+                            <field name="assigned_date"/>
+                            <field name="due_date"/>
+                            <field name="status" readonly="1"/>
+                            <field name="progress" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Description">
+                        <field name="description"/>
+                    </group>
+
+                    <notebook>
+
+                        <page string="Subtasks">
+                            <field name="subtask_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="completed"/>
+                                </list>
+                            </field>
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- ATTENDANCE ACTION                                         -->
+    <!-- ========================================================= -->
+
+    <record id="action_ims_attendance" model="ir.actions.act_window">
+        <field name="name">Attendance</field>
+        <field name="res_model">ims.attendance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- ATTENDANCE LIST VIEW                                      -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_attendance_list" model="ir.ui.view">
+        <field name="name">ims.attendance.list</field>
+        <field name="model">ims.attendance</field>
+        <field name="arch" type="xml">
+            <list string="Attendance">
+                <field name="intern_id"/>
+                <field name="date"/>
+                <field name="status"/>
+                <field name="check_in_time"/>
+                <field name="check_out_time"/>
+                <field name="notes"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- ATTENDANCE FORM VIEW                                      -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_attendance_form" model="ir.ui.view">
+        <field name="name">ims.attendance.form</field>
+        <field name="model">ims.attendance</field>
+        <field name="arch" type="xml">
+            <form string="Attendance">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="intern_id"/>
+                            <field name="date"/>
+                            <field name="status"/>
+                        </group>
+
+                        <group>
+                            <field name="check_in_time"/>
+                            <field name="check_out_time"/>
+                        </group>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="notes"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- INTERNSHIP REPORT ACTION                                  -->
+    <!-- ========================================================= -->
+
+    <record id="action_ims_internship_report" model="ir.actions.act_window">
+        <field name="name">Internship Reports</field>
+        <field name="res_model">ims.internship.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- INTERNSHIP REPORT LIST VIEW                               -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_internship_report_list" model="ir.ui.view">
+        <field name="name">ims.internship.report.list</field>
+        <field name="model">ims.internship.report</field>
+        <field name="arch" type="xml">
+            <list string="Internship Reports">
+                <field name="name"/>
+                <field name="intern_id"/>
+                <field name="internship_id"/>
+                <field name="submission_date"/>
+                <field name="status"/>
+                <field name="file_path"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- INTERNSHIP REPORT FORM VIEW                               -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_internship_report_form" model="ir.ui.view">
+        <field name="name">ims.internship.report.form</field>
+        <field name="model">ims.internship.report</field>
+        <field name="arch" type="xml">
+            <form string="Internship Report">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="intern_id"/>
+                            <field name="internship_id"/>
+                        </group>
+
+                        <group>
+                            <field name="submission_date"/>
+                            <field name="status"/>
+                            <field name="file_path"/>
+                        </group>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- EVALUATION ACTION                                         -->
+    <!-- ========================================================= -->
+
+    <record id="action_ims_evaluation" model="ir.actions.act_window">
+        <field name="name">Evaluations</field>
+        <field name="res_model">ims.evaluation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- EVALUATION LIST VIEW                                      -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_evaluation_list" model="ir.ui.view">
+        <field name="name">ims.evaluation.list</field>
+        <field name="model">ims.evaluation</field>
+        <field name="arch" type="xml">
+            <list string="Evaluations">
+                <field name="intern_id"/>
+                <field name="supervisor_id"/>
+                <field name="score"/>
+                <field name="evaluation_date"/>
+                <field name="comments"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- EVALUATION FORM VIEW                                      -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_evaluation_form" model="ir.ui.view">
+        <field name="name">ims.evaluation.form</field>
+        <field name="model">ims.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="Evaluation">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="intern_id"/>
+                            <field name="supervisor_id"/>
+                            <field name="score"/>
+                        </group>
+
+                        <group>
+                            <field name="evaluation_date"/>
+                        </group>
+                    </group>
+
+                    <group string="Comments">
+                        <field name="comments"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- FEEDBACK ACTION                                           -->
+    <!-- ========================================================= -->
+
+    <record id="action_ims_feedback" model="ir.actions.act_window">
+        <field name="name">Feedback</field>
+        <field name="res_model">ims.feedback</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- FEEDBACK LIST VIEW                                        -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_feedback_list" model="ir.ui.view">
+        <field name="name">ims.feedback.list</field>
+        <field name="model">ims.feedback</field>
+        <field name="arch" type="xml">
+            <list string="Feedback">
+                <field name="intern_id"/>
+                <field name="supervisor_id"/>
+                <field name="date"/>
+                <field name="comment"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- FEEDBACK FORM VIEW                                        -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_feedback_form" model="ir.ui.view">
+        <field name="name">ims.feedback.form</field>
+        <field name="model">ims.feedback</field>
+        <field name="arch" type="xml">
+            <form string="Feedback">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="intern_id"/>
+                            <field name="supervisor_id"/>
+                        </group>
+
+                        <group>
+                            <field name="date"/>
+                        </group>
+                    </group>
+
+                    <group string="Feedback">
+                        <field name="comment"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- MAIN MENU                                                 -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_ims_root"
+        name="Internship Management"
+        sequence="10"
+        groups="internship_management.group_ims_hr,internship_management.group_ims_supervisor,base.group_system"
+    />
+
+
+    <!-- ========================================================= -->
+    <!-- INTERN MENU                                               -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_ims_interns"
+        name="Interns"
+        parent="menu_ims_root"
+        action="action_ims_intern"
+        sequence="10"
+        groups="internship_management.group_ims_hr,internship_management.group_ims_supervisor,base.group_system"
+    />
+
+
+    <!-- ========================================================= -->
+    <!-- INTERNSHIP MENU                                           -->
+    <!-- HR can see internships                                    -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_ims_internships"
+        name="Internships"
+        parent="menu_ims_root"
+        action="action_ims_internship"
+        sequence="20"
+        groups="internship_management.group_ims_hr,internship_management.group_ims_supervisor,base.group_system"
+    />
+
+
+    <!-- ========================================================= -->
+    <!-- TASK MENU                                                 -->
+    <!-- HR can see tasks                                          -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_ims_tasks"
+        name="Tasks"
+        parent="menu_ims_root"
+        action="action_ims_task"
+        sequence="30"
+        groups="internship_management.group_ims_hr,internship_management.group_ims_supervisor,base.group_system"
+    />
+
+
+    <!-- ========================================================= -->
+    <!-- ATTENDANCE MENU                                           -->
+    <!-- HR can see attendance                                     -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_ims_attendance"
+        name="Attendance"
+        parent="menu_ims_root"
+        action="action_ims_attendance"
+        sequence="40"
+        groups="internship_management.group_ims_hr,internship_management.group_ims_supervisor,base.group_system"
+    />
+
+
+    <!-- ========================================================= -->
+    <!-- REPORT MENU                                               -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_ims_reports"
+        name="Internship Reports"
+        parent="menu_ims_root"
+        action="action_ims_internship_report"
+        sequence="50"
+        groups="internship_management.group_ims_supervisor,base.group_system"
+    />
+
+
+    <!-- ========================================================= -->
+    <!-- EVALUATION MENU                                           -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_ims_evaluations"
+        name="Evaluations"
+        parent="menu_ims_root"
+        action="action_ims_evaluation"
+        sequence="60"
+        groups="internship_management.group_ims_supervisor,base.group_system"
+    />
+
+
+    <!-- ========================================================= -->
+    <!-- FEEDBACK MENU                                             -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_ims_feedback"
+        name="Feedback"
+        parent="menu_ims_root"
+        action="action_ims_feedback"
+        sequence="70"
+        groups="internship_management.group_ims_supervisor,base.group_system"
+    />
+
+</odoo>

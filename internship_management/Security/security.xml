@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================= -->
+    <!-- IMS SECURITY GROUPS                                      -->
+    <!-- ========================================================= -->
+
+    <!-- ========================================================= -->
+    <!-- INTERN                                                   -->
+    <!-- ========================================================= -->
+
+    <record id="group_ims_intern" model="res.groups">
+        <field name="name">Intern</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISOR                                               -->
+    <!-- General supervisor role                                  -->
+    <!-- ========================================================= -->
+
+    <record id="group_ims_supervisor" model="res.groups">
+        <field name="name">Internship Supervisor</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- INTERNSHIP COORDINATOR                                   -->
+    <!-- Coordinator inherits Supervisor                          -->
+    <!-- ========================================================= -->
+
+    <record id="group_ims_coordinator" model="res.groups">
+        <field name="name">Internship Coordinator</field>
+        <field name="implied_ids" eval="[(4, ref('group_ims_supervisor'))]"/>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SENIOR SUPERVISOR                                        -->
+    <!-- Senior Supervisor inherits Coordinator                   -->
+    <!-- ========================================================= -->
+
+    <record id="group_ims_senior_supervisor" model="res.groups">
+        <field name="name">Senior Supervisor</field>
+        <field name="implied_ids" eval="[(4, ref('group_ims_coordinator'))]"/>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- HR OFFICER                                               -->
+    <!-- Separate from supervision hierarchy                     -->
+    <!-- ========================================================= -->
+
+    <record id="group_ims_hr" model="res.groups">
+        <field name="name">HR Officer</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- PORTAL RECORD RULES                                      -->
+    <!-- ========================================================= -->
+
+    <!-- Intern can only see their own intern record -->
+
+    <record id="rule_ims_portal_own_intern" model="ir.rule">
+        <field name="name">IMS Portal - Own Intern Record</field>
+        <field name="model_id" ref="model_ims_intern"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('email', '=', user.email)]</field>
+    </record>
+
+
+    <!-- Intern can only see their own internship -->
+
+    <record id="rule_ims_portal_own_internship" model="ir.rule">
+        <field name="name">IMS Portal - Own Internship</field>
+        <field name="model_id" ref="model_ims_internship"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">
+            [('id', 'in', user.env['ims.task'].search([('intern_id.email', '=', user.email)]).mapped('internship_id').ids)]
+        </field>
+    </record>
+
+
+    <!-- Intern can only see their own tasks -->
+
+    <record id="rule_ims_portal_own_task" model="ir.rule">
+        <field name="name">IMS Portal - Own Tasks</field>
+        <field name="model_id" ref="model_ims_task"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('intern_id.email', '=', user.email)]</field>
+    </record>
+
+
+    <!-- Intern can only see their own internship reports -->
+
+    <record id="rule_ims_portal_own_report" model="ir.rule">
+        <field name="name">IMS Portal - Own Reports</field>
+        <field name="model_id" ref="model_ims_internship_report"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('intern_id.email', '=', user.email)]</field>
+    </record>
+
+
+    <!-- Intern can only see their own feedback -->
+
+    <record id="rule_ims_portal_own_feedback" model="ir.rule">
+        <field name="name">IMS Portal - Own Feedback</field>
+        <field name="model_id" ref="model_ims_feedback"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('intern_id.email', '=', user.email)]</field>
+    </record>
+
+</odoo>

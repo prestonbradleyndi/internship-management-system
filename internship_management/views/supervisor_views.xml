@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISORS ACTION -->
+    <!-- ========================================================= -->
+
+    <record id="action_ims_supervisors" model="ir.actions.act_window">
+        <field name="name">Supervisors</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">list,form</field>
+
+        <!--
+            Only users who have the direct
+            Assigned Internship Supervisor group.
+        -->
+        <field name="domain" eval="[('groups_id', 'in', [ref('internship_management.group_ims_assigned_supervisor')])]"/>
+
+        <field name="context">
+            {
+                'create': False,
+                'edit': False,
+                'delete': False
+            }
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISOR LIST VIEW -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_supervisors_list" model="ir.ui.view">
+        <field name="name">ims.supervisors.list</field>
+        <field name="model">res.users</field>
+
+        <field name="arch" type="xml">
+            <list
+                string="Supervisors"
+                create="0"
+                edit="0"
+                delete="0"
+            >
+
+                <field name="name"/>
+                <field name="login"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="active"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISOR FORM VIEW -->
+    <!-- ========================================================= -->
+
+    <record id="view_ims_supervisors_form" model="ir.ui.view">
+        <field name="name">ims.supervisors.form</field>
+        <field name="model">res.users</field>
+
+        <field name="arch" type="xml">
+            <form
+                string="Supervisor"
+                create="0"
+                edit="0"
+                delete="0"
+            >
+
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <field name="name"/>
+                            <field name="login"/>
+                            <field name="email"/>
+                        </group>
+
+                        <group>
+                            <field name="phone"/>
+                            <field name="active"/>
+                        </group>
+
+                    </group>
+
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ========================================================= -->
+    <!-- SUPERVISORS MENU -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_ims_supervisors"
+        name="Supervisors"
+        parent="internship_management.menu_ims_root"
+        action="action_ims_supervisors"
+        sequence="15"
+        groups="internship_management.group_ims_hr,base.group_system"
+    />
+
+</odoo>
